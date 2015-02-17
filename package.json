@@ -1,0 +1,43 @@
+{
+  "name": "inject-lr-script",
+  "version": "1.0.0",
+  "description": "inject live reload into HTML content",
+  "main": "index.js",
+  "license": "MIT",
+  "author": {
+    "name": "Matt DesLauriers",
+    "email": "dave.des@gmail.com",
+    "url": "https://github.com/mattdesl"
+  },
+  "dependencies": {
+    "response-stream": "0.0.0",
+    "through2": "^0.6.3",
+    "trumpet": "^1.7.0"
+  },
+  "devDependencies": {
+    "ecstatic": "^0.6.0",
+    "request": "^2.53.0",
+    "tape": "^3.5.0"
+  },
+  "scripts": {
+    "test": "node test.js"
+  },
+  "keywords": [
+    "inject",
+    "live",
+    "reload",
+    "tiny-lr",
+    "lr",
+    "tiny",
+    "tinyreload",
+    "html"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mattdesl/inject-lr-script.git"
+  },
+  "homepage": "https://github.com/mattdesl/inject-lr-script",
+  "bugs": {
+    "url": "https://github.com/mattdesl/inject-lr-script/issues"
+  }
+}
