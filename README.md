@@ -7,6 +7,7 @@ Inject the [LiveReload script snippet](http://feedback.livereload.com/knowledgeb
 Example:
 
 ```js
+var inject = require('inject-lr-script')
 var handler = require('ecstatic')(process.cwd())
 
 http.createServer(function (req, res) {
