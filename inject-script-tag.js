@@ -1,5 +1,4 @@
 var trumpet = require('trumpet'),
-    duplexer = require('duplexer'),
     through = require('through2')
 
 //injects a <script> tag into the body
