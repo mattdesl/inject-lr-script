@@ -16,8 +16,9 @@ function run(file) {
             request.get({
                 uri: base + '/'+file+'.html'
             }, function(err, resp, data) {
-                t.equal(data, expected, file+' matches')
                 server.close()
+                if (err) return t.fail(err)
+                t.equal(data, expected, file+' matches')
             })
         })
     }
@@ -26,6 +27,7 @@ function run(file) {
 test('inject script into body', run('body'))
 test('inject with opt', run('opt'))
 test('inject without any other tags', run('none'))
+// test('inject without any body tag', run('no-body'))
 
 function createServer(cb) {
     var handler = ecstatic(__dirname)
