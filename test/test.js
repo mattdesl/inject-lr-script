@@ -27,7 +27,7 @@ function run(file) {
 test('inject script into body', run('body'))
 test('inject with opt', run('opt'))
 test('inject without any other tags', run('none'))
-// test('inject without any body tag', run('no-body'))
+test('inject without any body tag', run('no-body'))
 
 function createServer(cb) {
     var handler = ecstatic(__dirname)
