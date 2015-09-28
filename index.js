@@ -4,10 +4,11 @@ var inject = require('./inject-script-tag')
 
 module.exports = function(resp, opt) {
     opt = opt||{}
+    var protocol = opt.protocol || "http"
     var host = (opt.host || 'localhost').split(':')[0]
     var port = opt.port || 35729
     var injector = inject({
-        src: 'http://'+host+':'+port+'/livereload.js?snipver=1'
+        src: protocol + '://'+host+':'+port+'/livereload.js?snipver=1'
     })
 
     var stream = responsify(through())

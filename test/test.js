@@ -28,6 +28,7 @@ test('inject script into body', run('body'))
 test('inject with opt', run('opt'))
 test('inject without any other tags', run('none'))
 test('inject without any body tag', run('no-body'))
+test('inject with https', run('https'))
 
 function createServer(cb) {
     var handler = ecstatic(__dirname)
@@ -36,6 +37,8 @@ function createServer(cb) {
         var opt = {}
         if (req.url === '/opt.html')
             opt = { port: 3000, host: '12.0.0.0' }
+        if (req.url === '/https.html')
+            opt = { protocol: 'https'}
         return handler(req, inject(res, opt))
     }).listen(8000, cb)
 }
