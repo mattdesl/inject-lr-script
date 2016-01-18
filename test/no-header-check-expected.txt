@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body><script type="text/javascript" src="http://localhost:35729/livereload.js?snipver=1"></script>
+    <script>console.log("second")</script>
+</body>
+</html>

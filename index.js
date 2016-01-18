@@ -2,7 +2,8 @@ var responsify = require('response-stream')
 var through = require('through2')
 var inject = require('./inject-script-tag')
 
-module.exports = function injectLiveScript (resp, opt) {
+module.exports = injectLiveScript
+function injectLiveScript (resp, opt) {
   opt = opt || {}
   var protocol = opt.protocol || 'http'
   var host = (opt.host || 'localhost').split(':')[0]
@@ -14,9 +15,13 @@ module.exports = function injectLiveScript (resp, opt) {
   var stream = responsify(through())
   injector.pipe(resp)
 
-  stream
-    .on('setHeader', setHeaderListener)
-    .on('writeHead', writeHeadListener)
+  if (opt.autoDetect !== false) {
+    stream
+      .on('setHeader', setHeaderListener)
+      .on('writeHead', writeHeadListener)
+  } else {
+    stream.pipe(injector)
+  }
 
   return stream
 

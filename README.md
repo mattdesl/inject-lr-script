@@ -2,7 +2,9 @@
 
 [![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
 
-Inject the [LiveReload script snippet](http://feedback.livereload.com/knowledgebase/articles/86180-how-do-i-add-the-script-tag-manually) into a HTML response. 
+Inject the [LiveReload script snippet](http://feedback.livereload.com/knowledgebase/articles/86180-how-do-i-add-the-script-tag-manually) into a HTML response.
+
+By default, this will attempt to discover HTML files as their headers are written. You can pass `{ autoDetect: false }` to ignore this and just inject the script on all incoming responses.
 
 Example:
 
@@ -27,10 +29,11 @@ Will inject LiveReload `<script>` tag into the body of an HTML script going thro
 
 - `port` the live reload server port, default 35729
 - `host` the host, default `localhost`
+- `autoDetect` whether to auto-detect for HTML types, default true. Setting this to false will inject on all incoming responses.
 
 ## See Also
 
-- [inject-lr-script-stream](https://github.com/yoshuawuyts/inject-lr-script-stream) - does not check response headers
+- [inject-lr-script-stream](https://github.com/yoshuawuyts/inject-lr-script-stream) - a simpler, streaming approach
 
 ## License
 
