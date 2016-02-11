@@ -1,6 +1,6 @@
 {
   "name": "inject-lr-script",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "inject live reload into HTML content",
   "main": "index.js",
   "license": "MIT",
