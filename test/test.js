@@ -1,7 +1,8 @@
-var inject = require('../')
+var liveReload = require('../')
 var test = require('tape')
 var http = require('http')
-var ecstatic = require('ecstatic')
+var serveStatic = require('serve-static')
+var stacked = require('stacked')
 var request = require('request')
 var fs = require('fs')
 var path = require('path')
@@ -30,29 +31,12 @@ test('inject with opt', run('opt'))
 test('inject without any other tags', run('none'))
 test('inject without any body tag', run('no-body'))
 test('inject with https', run('https'))
-test('injects but does not look for HTML', run('no-header-check', '.txt'))
-
-test('should not mutate non-html', function (t) {
-  t.plan(1)
-  var handler = ecstatic(__dirname)
-  var server = http.createServer(function (req, res) {
-    res = inject(res)
-    handler(req, res)
-  }).listen(8000, function () {
-    request.get({
-      uri: base + '/not-html.txt'
-    }, function (err, resp, data) {
-      server.close()
-      if (err) return t.fail(err)
-      t.equal(data, 'hello world!')
-    })
-  })
-})
 
 function createServer (cb) {
-  var handler = ecstatic(__dirname)
+  var app = stacked()
 
-  return http.createServer(function (req, res) {
+  var live = liveReload()
+  app.use(function (req, res, next) {
     var opt = {}
     if (req.url === '/opt.html') {
       opt = { port: 3000, host: '12.0.0.0' }
@@ -60,9 +44,12 @@ function createServer (cb) {
     if (req.url === '/https.html') {
       opt = { protocol: 'https' }
     }
-    if (req.url === '/no-header-check.txt') {
-      opt = { autoDetect: false }
-    }
-    return handler(req, inject(res, opt))
-  }).listen(8000, cb)
+    live.port = opt.port
+    live.host = opt.host
+    live(req, res, next)
+  })
+
+  app.use(serveStatic(__dirname))
+
+  return http.createServer(app).listen(8000, cb)
 }

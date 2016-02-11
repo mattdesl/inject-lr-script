@@ -1,52 +1,39 @@
-var responsify = require('response-stream')
-var through = require('through2')
-var inject = require('./inject-script-tag')
+var respModifier = require('resp-modifier')
+var path = require('path')
 
-module.exports = injectLiveScript
-function injectLiveScript (resp, opt) {
-  opt = opt || {}
-  var protocol = opt.protocol || 'http'
-  var host = (opt.host || 'localhost').split(':')[0]
-  var port = opt.port || 35729
-  var injector = inject({
-    src: protocol + '://' + host + ':' + port + '/livereload.js?snipver=1'
+module.exports = injectLiveReloadSnippet
+function injectLiveReloadSnippet (opts) {
+  opts = opts || {}
+
+  var modifier = respModifier({
+    rules: [
+      { match: /<body[^>]*>/i, fn: prepend }
+    ]
   })
 
-  var stream = responsify(through())
-  injector.pipe(resp)
-
-  if (opt.autoDetect !== false) {
-    stream
-      .on('setHeader', setHeaderListener)
-      .on('writeHead', writeHeadListener)
-  } else {
-    stream.pipe(injector)
-  }
-
-  return stream
-
-  function setHeaderListener (args, prevent) {
-    if (typeof args[1] !== 'string') return
-
-    var isCType = args[0].toLowerCase() === 'content-type'
-    var isHTML = args[1].toLowerCase().indexOf('text/html') >= 0
-    if (isCType) {
-      if (isHTML) stream.pipe(injector)
-      else stream.pipe(resp)
-
-      stream.removeListener('setHeader', setHeaderListener)
-      stream.removeListener('writeHead', writeHeadListener)
+  var fn = function (req, res, next) {
+    var ext = path.extname(req.url)
+    if (!ext || /\.html?$/i.test(ext)) {
+      if (!req.headers.accept) {
+        req.headers.accept = 'text/html'
+      }
     }
+    modifier(req, res, next)
   }
 
-  function writeHeadListener (args, prevent) {
-    var hasCType = 'content-type' in args[1]
-    var isHTML = args[1]['content-type'] === 'text/html'
+  fn.host = opts.host
+  fn.port = opts.port
 
-    if (hasCType && isHTML) stream.pipe(injector)
-    else stream.pipe(resp)
-
-    stream.removeListener('setHeader', setHeaderListener)
-    stream.removeListener('writeHead', writeHeadListener)
+  function snippet () {
+    var host = fn.host || 'localhost'
+    var port = fn.port || 35729
+    var src = '//' + host + ':' + port + '/livereload.js?snipver=1'
+    return '<script type="text/javascript" src="' + src + '" async="" defer=""></script>'
   }
+
+  function prepend (req, res, body) {
+    return body + snippet()
+  }
+
+  return fn
 }

@@ -10,13 +10,12 @@
     "url": "https://github.com/mattdesl"
   },
   "dependencies": {
-    "response-stream": "0.0.0",
-    "through2": "^0.6.3",
-    "trumpet": "^1.7.1"
+    "resp-modifier": "^6.0.0"
   },
   "devDependencies": {
-    "ecstatic": "^0.6.0",
     "request": "^2.53.0",
+    "serve-static": "^1.10.2",
+    "stacked": "^1.1.1",
     "standard": "^5.4.1",
     "tape": "^3.5.0"
   },

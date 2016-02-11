@@ -4,17 +4,21 @@
 
 Inject the [LiveReload script snippet](http://feedback.livereload.com/knowledgebase/articles/86180-how-do-i-add-the-script-tag-manually) into a HTML response.
 
-By default, this will attempt to discover HTML files as their headers are written. You can pass `{ autoDetect: false }` to ignore this and just inject the script on all incoming responses.
+This detects `.htm` and `.html` and ensures they have `text/html` accept headers, if not yet set.
 
 Example:
 
 ```js
-var inject = require('inject-lr-script')
-var handler = require('ecstatic')(process.cwd())
+var liveReload = require('inject-lr-script')
+var stacked = require('stacked')
+var http = require('http')
+var serveStatic = require('serve-static')
 
-http.createServer(function (req, res) {
-    return handler(req, inject(res))
-}).listen(8000, cb)
+var app = stacked()
+app.use(liveReload())
+app.use(serveStatic('app/'))
+
+var server = http.createServer(app)
 ```
 
 *Note:* This expects a `<body>` tag to be present in the HTML.
@@ -23,17 +27,41 @@ http.createServer(function (req, res) {
 
 [![NPM](https://nodei.co/npm/inject-lr-script.png)](https://www.npmjs.com/package/inject-lr-script)
 
-#### `inject(resp[, opt])`
+#### `middleware = liveReload([opt])`
 
-Will inject LiveReload `<script>` tag into the body of an HTML script going through `resp`. Options:
+Returns a function `middleware(req, res, next)` which injects a LiveReload `<script>` tag into the body of an HTML script.
+
+Options:
 
 - `port` the live reload server port, default 35729
 - `host` the host, default `localhost`
-- `autoDetect` whether to auto-detect for HTML types, default true. Setting this to false will inject on all incoming responses.
+
+You can also change the options at runtime:
+
+```js
+var liveReload = require('inject-lr-script')
+
+var liveInjector = liveReload()
+handler.use(function (req, res, next) {
+  if (liveReload) {
+    liveInjector.host = myHost
+    liveInjector.port = myPort
+    liveInjector(req, res, next)
+  } else {
+    next()
+  }
+})
+```
 
 ## See Also
 
 - [inject-lr-script-stream](https://github.com/yoshuawuyts/inject-lr-script-stream) - a simpler, streaming approach
+- [connect-livereload](https://github.com/intesso/connect-livereload) - a similar approach
+
+## Changelog
+
+- 2.x - major refactor: simplified and uses a connect-style middleware to improve performance/stability
+- 1.x - uses Beefy to try and auto-detect mime type based on response events
 
 ## License
 
