@@ -35,6 +35,8 @@ Options:
 
 - `port` the live reload server port, default 35729
 - `host` the host, default `localhost`
+- `path` the script path, default `'/livereload.js?snipver=1'`
+- `local` if true, the script will ignore the `port` and `host` and assumes its hosted locally on the same domain, default false
 
 You can also change the options at runtime:
 

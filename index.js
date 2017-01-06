@@ -23,11 +23,14 @@ function injectLiveReloadSnippet (opts) {
 
   fn.host = opts.host
   fn.port = opts.port
+  fn.path = opts.path
+  fn.local = opts.local
 
   function snippet () {
     var host = fn.host || 'localhost'
     var port = fn.port || 35729
-    var src = '//' + host + ':' + port + '/livereload.js?snipver=1'
+    var scriptPath = fn.path || '/livereload.js?snipver=1'
+    var src = fn.local ? scriptPath : ('//' + host + ':' + port + scriptPath)
     return '<script type="text/javascript" src="' + src + '" async="" defer=""></script>'
   }
 

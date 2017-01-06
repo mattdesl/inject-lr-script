@@ -12,6 +12,7 @@ var base = 'http://localhost:8000'
 function run (file, ext) {
   ext = ext || '.html'
   var expected = fs.readFileSync(path.join(__dirname, file + '-expected' + ext), 'utf8')
+
   return function (t) {
     t.plan(1)
     var server = createServer(function () {
@@ -31,6 +32,8 @@ test('inject with opt', run('opt'))
 test('inject without any other tags', run('none'))
 test('inject without any body tag', run('no-body'))
 test('inject with https', run('https'))
+test('inject with path', run('path'))
+test('inject with local', run('local'))
 
 function createServer (cb) {
   var app = stacked()
@@ -44,8 +47,16 @@ function createServer (cb) {
     if (req.url === '/https.html') {
       opt = { protocol: 'https' }
     }
+    if (req.url === '/path.html') {
+      opt = { path: '/test/livereload.js' }
+    }
+    if (req.url === '/local.html') {
+      opt = { local: true, path: 'livereload.js' }
+    }
     live.port = opt.port
     live.host = opt.host
+    live.path = opt.path
+    live.local = opt.local
     live(req, res, next)
   })
 
