@@ -5,7 +5,7 @@ module.exports = injectLiveReloadSnippet
 function injectLiveReloadSnippet (opts) {
   opts = opts || {}
 
-  var injectMatch = opts.injectInHead ? /<head[^>]*>/i : /<body[^>]*>/i;
+  var injectMatch = opts.injectInHead ? /<head[^>]*>/i : /<body[^>]*>/i
   var modifier = respModifier({
     rules: [
       { match: injectMatch, fn: prepend }
