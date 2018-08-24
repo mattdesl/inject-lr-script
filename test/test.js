@@ -34,11 +34,11 @@ test('inject without any body tag', run('no-body'))
 test('inject with https', run('https'))
 test('inject with path', run('path'))
 test('inject with local', run('local'))
+test('inject in head', run('head'))
 
 function createServer (cb) {
   var app = stacked()
 
-  var live = liveReload()
   app.use(function (req, res, next) {
     var opt = {}
     if (req.url === '/opt.html') {
@@ -53,10 +53,10 @@ function createServer (cb) {
     if (req.url === '/local.html') {
       opt = { local: true, path: 'livereload.js' }
     }
-    live.port = opt.port
-    live.host = opt.host
-    live.path = opt.path
-    live.local = opt.local
+    if (req.url === '/head.html') {
+      opt = { injectInHead: true }
+    }
+    var live = liveReload(opt)
     live(req, res, next)
   })
 

@@ -9,19 +9,19 @@ This detects `.htm` and `.html` and ensures they have `text/html` accept headers
 Example:
 
 ```js
-var liveReload = require('inject-lr-script')
-var stacked = require('stacked')
-var http = require('http')
-var serveStatic = require('serve-static')
+var liveReload = require('inject-lr-script');
+var stacked = require('stacked');
+var http = require('http');
+var serveStatic = require('serve-static');
 
-var app = stacked()
-app.use(liveReload())
-app.use(serveStatic('app/'))
+var app = stacked();
+app.use(liveReload());
+app.use(serveStatic('app/'));
 
-var server = http.createServer(app)
+var server = http.createServer(app);
 ```
 
-*Note:* This expects a `<body>` tag to be present in the HTML.
+_Note:_ This expects a `<body>` tag to be present in the HTML.
 
 ## Usage
 
@@ -37,22 +37,23 @@ Options:
 - `host` the host, default `localhost`
 - `path` the script path, default `'/livereload.js?snipver=1'`
 - `local` if true, the script will ignore the `port` and `host` and assumes its hosted locally on the same domain, default false
+- `injectInHead` if true, the script will be injected after the `<head>` tag instead of the `<body>` tag, default `false`
 
 You can also change the options at runtime:
 
 ```js
-var liveReload = require('inject-lr-script')
+var liveReload = require('inject-lr-script');
 
-var liveInjector = liveReload()
-handler.use(function (req, res, next) {
+var liveInjector = liveReload();
+handler.use(function(req, res, next) {
   if (liveReload) {
-    liveInjector.host = myHost
-    liveInjector.port = myPort
-    liveInjector(req, res, next)
+    liveInjector.host = myHost;
+    liveInjector.port = myPort;
+    liveInjector(req, res, next);
   } else {
-    next()
+    next();
   }
-})
+});
 ```
 
 ## See Also
