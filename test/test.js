@@ -33,6 +33,7 @@ test('inject without any other tags', run('none'))
 test('inject without any body tag', run('no-body'))
 test('inject with https', run('https'))
 test('inject with path', run('path'))
+test('inject with module', run('module'))
 test('inject with local', run('local'))
 
 function createServer (cb) {
@@ -50,6 +51,12 @@ function createServer (cb) {
     if (req.url === '/path.html') {
       opt = { path: '/test/livereload.js' }
     }
+    if (req.url === '/module.html') {
+      opt = { type: 'module', local: true, path: '/my-script.js' }
+    }
+    if (req.url === '/noasync.html') {
+      opt = { type: 'module', local: true, path: '/my-script.js', async: false, defer: false }
+    }
     if (req.url === '/local.html') {
       opt = { local: true, path: 'livereload.js' }
     }
@@ -57,6 +64,9 @@ function createServer (cb) {
     live.host = opt.host
     live.path = opt.path
     live.local = opt.local
+    live.type = opt.type
+    live.async = opt.async
+    live.defer = opt.defer
     live(req, res, next)
   })
 

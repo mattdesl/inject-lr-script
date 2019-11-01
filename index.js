@@ -25,13 +25,30 @@ function injectLiveReloadSnippet (opts) {
   fn.port = opts.port
   fn.path = opts.path
   fn.local = opts.local
+  fn.async = opts.async
+  fn.defer = opts.defer
+  fn.type = opts.type
 
   function snippet () {
     var host = fn.host || 'localhost'
     var port = fn.port || 35729
     var scriptPath = fn.path || '/livereload.js?snipver=1'
     var src = fn.local ? scriptPath : ('//' + host + ':' + port + scriptPath)
-    return '<script type="text/javascript" src="' + src + '" async="" defer=""></script>'
+    var type = fn.type || 'text/javascript'
+    var async = fn.async !== false
+    var defer = fn.defer !== false
+    var attrs = [
+      ['type', type],
+      ['src', src],
+      async ? ['async', ''] : false,
+      defer ? ['defer', ''] : false
+    ]
+      .filter(Boolean)
+      .map(function (arg) {
+        return arg[0] + '=' + JSON.stringify(arg[1])
+      })
+      .join(' ')
+    return '<script ' + attrs + '></script>'
   }
 
   function prepend (req, res, body) {

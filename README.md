@@ -37,6 +37,9 @@ Options:
 - `host` the host, default `localhost`
 - `path` the script path, default `'/livereload.js?snipver=1'`
 - `local` if true, the script will ignore the `port` and `host` and assumes its hosted locally on the same domain, default false
+- `type` the script type, default `"text/javascript"`, could also be `"module"` for ES modules
+- `defer` a boolean whether to add this attribute to the script tag, default `true`
+- `async` a boolean whether to add this attribute to the script tag, default `true`
 
 You can also change the options at runtime:
 
