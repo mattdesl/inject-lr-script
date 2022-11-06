@@ -17,7 +17,7 @@
     "serve-static": "^1.10.2",
     "stacked": "^1.1.1",
     "standard": "^5.4.1",
-    "tape": "^3.5.0"
+    "tape": "^5.6.1"
   },
   "scripts": {
     "test": "standard && node test/test.js"
